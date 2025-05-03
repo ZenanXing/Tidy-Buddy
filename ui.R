@@ -114,6 +114,10 @@ page_fillable(
     
   # Theme
   theme = bs_theme(bootswatch = "minty"),
+  
+  tags$head(
+    tags$title("Tidy Buddy")  # This sets the title of the webpage
+  ),
 
   # Application title
   titlePanel(div(style = "text-align: center;", "Tidy Buddy")),
