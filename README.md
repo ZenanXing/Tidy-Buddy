@@ -1,8 +1,5 @@
 # Tidy Buddy
 
-
-## Description
-
 **Tidy Buddy** is designed to assist users in generating data in a tidy format, making it easier to prepare datasets for various analytical tasks. While this app is particularly useful for [IGGYPOPseq](https://github.com/ZenanXing/Construct-Validation-for-IGGYPOPseq) users without coding background by helping create the input file `SampleInfo.tsv`, its functionality extends to generating any tidy format data suitable for a variety of research application, such as [BioCurve Analyzer](https://github.com/ZenanXing/Biocurve-Analyzer) :)  
 
 **Key Features**
