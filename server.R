@@ -120,9 +120,6 @@ function(input, output, session) {
        })
      })
    })
-
-   
-# Output ----------------------------------------------------------------------
    
    observe({
      req(input$n_tb, input$n_var)
@@ -136,6 +133,25 @@ function(input, output, session) {
      }
    })
    
+   # Reset the table when input$row or input$col changes
+   observeEvent({ input$row; input$col}, {
+     nr <- as.numeric(input$row)
+     nc <- as.numeric(input$col)
+     
+     lapply(seq_len(as.numeric(input$n_tb)), function(i) {
+       lapply(seq_len(as.numeric(input$n_var)), function(j) {
+         key <- paste0("df_", i, "_", j)  # Unique key for each table and variable
+         rv[[key]] <- matrix(NA, nrow = nr, ncol = nc, 
+                             dimnames = list(LETTERS[seq_len(nr)], seq_len(nc))) %>% 
+           as.data.frame()
+       })
+     })
+   })
+   
+
+   
+# Output ----------------------------------------------------------------------
+  
   ## Reactive table
   df_tidy <- eventReactive(input$Trsfm_Butn, {
     # required input info.
