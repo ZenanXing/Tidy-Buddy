@@ -45,7 +45,7 @@ If you need any help or support related to this app, feel free to contact us at 
 
 ## License & DOI
 
-This project is licensed under the GNU General Public License, version 3 (GPLv3) - see the LICENSE.md file for details, and the DOI for the app is [![DOI](https://zenodo.org/badge/851862809.svg)](https://doi.org/10.5281/zenodo.14681407).  
+This project is licensed under the GNU General Public License, version 3 (GPLv3) - see the LICENSE.md file for details, and the DOI for the app is [![DOI](https://zenodo.org/badge/964714706.svg)](https://doi.org/10.5281/zenodo.15331548).  
   
 [(Back to top)](#tidy-buddy)
 
