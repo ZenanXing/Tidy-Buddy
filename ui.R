@@ -41,7 +41,8 @@ card1 <- card(
     uiOutput("tb_no_ui"),
     uiOutput("var_slt_ui")
   ),
-  uiOutput("var_layout_ui"),
+  div(style = "overflow-x: auto; max-width: 800px; max-height: 800px;",
+      uiOutput("var_layout_ui")),
   # Confirm the input
   div(style = "margin-top: 10px"), 
   div(style = "text-align: right;",
@@ -111,7 +112,16 @@ card2 <- navset_card_tab(
 # Arrange both cards ------------------------------------------------------
 
 page_fillable(
-    
+  
+  tags$head(
+    tags$style(HTML("
+            html {
+                transform: scale(0.75);
+                transform-origin: top left;
+                width: 133.33%; /* Adjust width for scaling */
+            }
+        "))
+  ),
   # Theme
   theme = bs_theme(bootswatch = "minty"),
   
