@@ -5,7 +5,7 @@
 ### Key Features
 
 - Dynamic Sample Entry: Easily specify the number and format of input tables and variables. The application utilized [`rhandsontable`](https://github.com/jrowen/rhandsontable?tab=readme-ov-file), providing an Excel-like interface that enables convenient features, such as dragging to copy cell values.
-- Interactive Data Preview: Preview the generated dataset to verify that the data meets your requirements before downloading.
+- Convenient Data Preview: Preview the generated dataset to verify that the data meets your requirements before downloading.
 - Diverse File Export: Download the generated data in a variety of formats, ready for immediate use in your analysis workflow.
 
 ## Getting Started
@@ -33,7 +33,7 @@ To use Tidy Buddy locally, you can follow the steps.
 
 ### How It Works
 
-The breif tutorial for the app is available [here](./Tutorial.pdf). We have included datasets from our previously published paper as examples, which you can download for reference.
+The brief tutorial for the app is available [here](./Tutorial.pdf). We have included datasets from our previously published paper as examples, which you can download for reference.
 
 ### Help
 
