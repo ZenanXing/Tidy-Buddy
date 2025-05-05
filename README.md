@@ -2,9 +2,9 @@
 
 **Tidy Buddy** is designed to assist users in generating data in a tidy format, making it easier to prepare datasets for various analytical tasks. While this app is particularly useful for [IGGYPOPseq](https://github.com/ZenanXing/Construct-Validation-for-IGGYPOPseq) users without coding background by helping create the input file `SampleInfo.tsv`, its functionality extends to generating any tidy format data suitable for a variety of research application, such as [BioCurve Analyzer](https://github.com/ZenanXing/Biocurve-Analyzer) :)  
 
-**Key Features**
+#### Key Features
 
-- Dynamic Sample Entry: Easily specify the number and format of input tables and variables. The application utilized `rhandsontable`, providing an Excel-like interface that enables convenient features, such as dragging to copy cell values.
+- Dynamic Sample Entry: Easily specify the number and format of input tables and variables. The application utilized [`rhandsontable`](https://github.com/jrowen/rhandsontable?tab=readme-ov-file), providing an Excel-like interface that enables convenient features, such as dragging to copy cell values.
 - Interactive Data Preview: Preview the generated dataset to verify that the data meets your requirements before downloading.
 - Diverse File Export: Download the generated data in a variety of formats, ready for immediate use in your analysis workflow.
 
@@ -22,7 +22,7 @@ To use Tidy Buddy locally, you can follow the steps.
   In addition, these R packages should also be installed by from CRAN or GitHub using the code below.  
 
       ```
-      install.packages("shiny", "shinyjs", "shinyalert", "shinycssloaders", "shinyhelper", "bslib")
+      install.packages("shiny", "rhandsontable", "bslib", "tidyverse", "openxlsx")
       ```
 
   3. Run the shiny app using the following code in RStudio.
