@@ -3,13 +3,20 @@ function(input, output, session) {
 
 # Input --------------------------------------------------------------------
   rv <- reactiveValues()
+  observe({
+    req(input$n_tb!="", input$n_var!="", input$row!="", input$col!="")
+    rv$n_tb <- input$n_tb
+    rv$n_var <- input$n_var
+    rv$row <- input$row
+    rv$col <- input$col
+  })
   
 ## Number of tables --------------------------------------------------------
   
   output$tb_no_ui <- renderUI({
     selectInput(inputId = "tb_no", 
                 label = "- Table No.", 
-                choices = seq_len(as.numeric(input$n_tb)))
+                choices = seq_len(as.numeric(rv$n_tb)))
   })
   
 ## Number of variables -----------------------------------------------------
@@ -17,13 +24,13 @@ function(input, output, session) {
   output$var_no_ui <- renderUI({
     selectInput(inputId = "var_no", 
                 label = "- Variable No.", 
-                choices = seq_len(as.numeric(input$n_var)))
+                choices = seq_len(as.numeric(rv$n_var)))
   })
 
 ## Variable Names ----------------------------------------------------------
 
   output$var_nms_ui <- renderUI({
-    ui_list <- lapply(seq_len(as.numeric(input$n_var)), function(i) {
+    ui_list <- lapply(seq_len(as.numeric(rv$n_var)), function(i) {
       conditionalPanel(
         condition = sprintf("input.var_no == %d", i),
         textInput(
@@ -41,7 +48,7 @@ function(input, output, session) {
   
    output$var_tps_ui <- renderUI({
       # We build a list of conditionalPanels, one per possible 'var_no'
-      ui_list <- lapply(seq_len(as.numeric(input$n_var)), function(i) {
+      ui_list <- lapply(seq_len(as.numeric(rv$n_var)), function(i) {
         conditionalPanel(
           # Only show this text input if var_no == i
           condition = sprintf("input.var_no == %d", i),
@@ -61,7 +68,7 @@ function(input, output, session) {
 ## Variable Layouts --------------------------------------------------------
    
    output$var_slt_ui <- renderUI({
-     n_var <- as.numeric(input$n_var)
+     n_var <- as.numeric(rv$n_var)
      lab <- vapply(seq_len(n_var), function(i) {
        nm <- input[[paste0("var_nm_", i)]] %||% paste0("V", i)
        paste(i, nm, sep = " - ")
@@ -75,8 +82,8 @@ function(input, output, session) {
    
    output$var_layout_ui <- renderUI({
      if (is.null(input$var_slt_no) || input$var_slt_no == "") { return(NULL) }
-     ui_list <- lapply(seq_len(as.numeric(input$n_tb)), function(i) {
-       lapply(seq_len(as.numeric(input$n_var)), function(j) {
+     ui_list <- lapply(seq_len(as.numeric(rv$n_tb)), function(i) {
+       lapply(seq_len(as.numeric(rv$n_var)), function(j) {
          conditionalPanel(
            condition = sprintf("input.tb_no == %d && input.var_slt_no == %d", i, j),
            div(style = "overflow-x: auto; max-width: 800px; max-height: 800px;",
@@ -89,12 +96,12 @@ function(input, output, session) {
    })
    
    # Render each rhandsontable
-   observeEvent({ input$n_tb; input$n_var; input$row; input$col; input$var_slt_no }, {
-     nr <- as.numeric(input$row)
-     nc <- as.numeric(input$col)
+   observeEvent({ rv$n_tb; rv$n_var; rv$row; rv$col; input$var_slt_no }, {
+     nr <- as.numeric(rv$row)
+     nc <- as.numeric(rv$col)
      
-     lapply(seq_len(as.numeric(input$n_tb)), function(i) {
-       lapply(seq_len(as.numeric(input$n_var)), function(j) {
+     lapply(seq_len(as.numeric(rv$n_tb)), function(i) {
+       lapply(seq_len(as.numeric(rv$n_var)), function(j) {
          key <- paste0("df_", i, "_", j)  # Unique key for each table and variable
          
          output[[key]] <- renderRHandsontable({
@@ -122,9 +129,9 @@ function(input, output, session) {
    })
    
    observe({
-     req(input$n_tb, input$n_var)
-     for (i in seq_len(as.numeric(input$n_tb))) {
-       for (j in seq_len(as.numeric(input$n_var))) {
+     req(rv$n_tb, rv$n_var)
+     for (i in seq_len(as.numeric(rv$n_tb))) {
+       for (j in seq_len(as.numeric(rv$n_var))) {
          key <- paste0("df_", i, "_", j)
          if (!is.null(input[[key]])) {
            rv[[key]] <- hot_to_r(input[[key]])
@@ -133,13 +140,13 @@ function(input, output, session) {
      }
    })
    
-   # Reset the table when input$row or input$col changes
-   observeEvent({ input$row; input$col}, {
-     nr <- as.numeric(input$row)
-     nc <- as.numeric(input$col)
+   # Reset the table when rv$row or rv$col changes
+   observeEvent({ rv$row; rv$col}, {
+     nr <- as.numeric(rv$row)
+     nc <- as.numeric(rv$col)
      
-     lapply(seq_len(as.numeric(input$n_tb)), function(i) {
-       lapply(seq_len(as.numeric(input$n_var)), function(j) {
+     lapply(seq_len(as.numeric(rv$n_tb)), function(i) {
+       lapply(seq_len(as.numeric(rv$n_var)), function(j) {
          key <- paste0("df_", i, "_", j)  # Unique key for each table and variable
          rv[[key]] <- matrix(NA, nrow = nr, ncol = nc, 
                              dimnames = list(LETTERS[seq_len(nr)], seq_len(nc))) %>% 
@@ -155,10 +162,10 @@ function(input, output, session) {
   ## Reactive table
   df_tidy <- eventReactive(input$Trsfm_Butn, {
     # required input info.
-    n_tb <- isolate({as.numeric(input$n_tb)})
-    n_var <- isolate({as.numeric(input$n_var)})
-    row <- isolate({as.numeric(input$row)})
-    col <- isolate({as.numeric(input$col)})
+    n_tb <- isolate({as.numeric(rv$n_tb)})
+    n_var <- isolate({as.numeric(rv$n_var)})
+    row <- isolate({as.numeric(rv$row)})
+    col <- isolate({as.numeric(rv$col)})
     # combine all the info.
     df_tidy <- NULL
     for (i in 1:n_tb) {
@@ -275,15 +282,33 @@ function(input, output, session) {
     return(data)
   })
   
+  iggypop_primer <- eventReactive(input$Gnrt_Butn, {
+    if (input$prr_slt == "upld") {
+      req(input$prr_file)
+      inFile <- input$prr_file
+      if (grepl("csv", inFile$datapath)){
+        data <- read.table(inFile$datapath, sep = ",", header = TRUE)
+      } else {
+        if (grepl("tsv", inFile$datapath)){
+          data <- read.table(inFile$datapath, sep = "\t", header = TRUE)
+        } else {
+          data <- read.xlsx(inFile$datapath, colNames = TRUE)
+        }
+      }
+    } else {
+      if (input$prr_plt == "pop") {
+        data <- read.xlsx("data/pPOP_PrimerPlate_Layout.xlsx", sheet = "TidyFormat")
+      } else {
+        data <- read.xlsx("data/pPlantPOP_PrimerPlate_Layout.xlsx", sheet = "TidyFormat")
+      }
+    }
+    return(data)
+  })
+  
   ## Reactive table
   df_iggypop_smp <- eventReactive(input$Gnrt_Butn, {
     # primer_info:
-    if (input$prr_plt == "pop") {
-      df_primer <- read.xlsx("data/pPOP_PrimerPlate_Layout.xlsx", sheet = "TidyFormat")
-    } else {
-      df_primer <- read.xlsx("data/pPlantPOP_PrimerPlate_Layout.xlsx", sheet = "TidyFormat")
-    }
-    df_primer <- df_primer %>% tidyr::unite(PrimerPlate, PrimerWell, sep = "_", col = "pos")
+    df_primer <- iggypop_primer() %>% tidyr::unite(PrimerPlate, PrimerWell, sep = "_", col = "pos")
     # plate layout:
     df_plate_layout <- iggypop_df_tidy()
     # ref_seq_info:
