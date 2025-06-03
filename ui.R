@@ -9,61 +9,109 @@ library(openxlsx)
 
 # Create two containers ---------------------------------------------------
 
-## Card 1 - Original Data --------------------------------------------------
+## Card 1 - Input ----------------------------------------------------------
 
-card1 <- card(
+card1 <- navset_card_tab(
   full_screen = TRUE,
   # Header
-  card_header(div(style = "text-align: center;", tags$b("Original Data"))),
-  # Dimension
-  h6(tags$b("Table Info.")),
-  textInput(inputId = "n_tb", label = "- Number of tables", value = 6),
-  p("- Dimension"),
-  div(
-    style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -15px;",
-    textInput(inputId = "col", label = "Column", value = 12),
-    textInput(inputId = "row", label = "Row", value = 8)
+  title = tags$b("Input"),
+  
+  # For IGGYPOPseq
+  nav_panel(
+    title = "For IGGYPOPseq",
+    div(style = "text-align: center;", h5(tags$b("Generate Plate Layout"))), 
+    
+    ## Reference data:
+    fileInput(inputId = "ref_file", 
+                label = h6(tags$b("Reference Info:"))),
+    div(style = "margin-top: -20px"),
+    p("Note: You may found this file in the output files after Oligo pool design by ",
+      tags$a(href = "https://github.com/cutlersr/iggypop.git",
+             "IGGYPOP"),
+      ", which is located here, ",
+      tags$a(href = "https://github.com/cutlersr/iggypop/blob/main/out/test/test_ReferenceInfo.xlsx", 
+             "out/test/test_ReferenceInfo.xlsx"), 
+      ". The information for 'primer_index', 'n_frags', 'ReferenceName', and 'ReferenceSequence' must appear with exactly those column names. 
+      If your sequences are CDS sequences, add the column 'CDS_length' as well. Please see the ",
+      tags$a(href = "https://github.com/ZenanXing/Tidy-Buddy/blob/main/data/ReferenceData_demo.tsv",
+             "demo file"),
+      " for reference."
+    ),
+    div(
+      style = "display: flex; gap: 20px; align-items: flex-start; margin-bottom: -15px;",
+      radioButtons(inputId = "gnrt_tp",
+                   label = tags$b("Generate the plate layout:"),
+                   choices = c("Recommended" = "rec",
+                               "Customized" = "cus"),
+                   inline = TRUE),
+      conditionalPanel(condition = "input.gnrt_tp == 'rec'",
+                       selectInput(inputId = "iggy_rep", 
+                                   label = tags$b("Colonies/Construct:"), 
+                                   choices = c("6", "8"),
+                                   selected = "6")
+      )
+    ),
+    div(style = "text-align: right;", 
+        actionButton(inputId = "Ref_upld", label = "Go")),
+    
+    # Input data
+    conditionalPanel(condition = "input.gnrt_tp == 'rec'",
+                     uiOutput("iggy_n_tb_ui"),
+                     div(style = "max-width: 800px;",
+                         uiOutput("iggy_var_layout_ui"))
+    ),
+    conditionalPanel(condition = "input.gnrt_tp == 'cus'",
+                     uiOutput("cus_iggy_n_tb_ui"),
+                     div(style = "max-width: 800px;",
+                         uiOutput("cus_iggy_var_layout_ui"))
+    )
+    
   ),
-  # Variable
-  h6(tags$b("Variable Info.")),
-  div(style = "margin-top: -20px"),
-  textInput(inputId = "n_var", label = "- Number of variables", value = 4),
-  div(
-    style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -10px;",
-    uiOutput("var_no_ui"),
-    uiOutput("var_nms_ui"),
-    uiOutput("var_tps_ui")
-  ),
-  # Input data
-  h6(tags$b("Input Data:")),
-  div(
-    style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -10px;",
-    uiOutput("tb_no_ui"),
-    uiOutput("var_slt_ui")
-  ),
-  div(style = "overflow-x: auto; max-width: 800px; max-height: 800px;",
-      uiOutput("var_layout_ui")),
-  # Confirm the input
-  div(style = "margin-top: 10px"), 
-  div(style = "text-align: right;",
-      actionButton(inputId = "Trsfm_Butn",
-                   label = "Transform it!"))
+  
+  nav_panel(
+    title = "Other purpose",
+    # Dimension
+    h6(tags$b("Table Info.")),
+    textInput(inputId = "n_tb", label = "- Number of tables", value = 6),
+    p("- Dimension"),
+    div(
+      style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -15px;",
+      textInput(inputId = "col", label = "Column", value = 12),
+      textInput(inputId = "row", label = "Row", value = 8)
+    ),
+    # Variable
+    h6(tags$b("Variable Info.")),
+    div(style = "margin-top: -20px"),
+    textInput(inputId = "n_var", label = "- Number of variables", value = 4),
+    div(
+      style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -10px;",
+      uiOutput("var_no_ui"),
+      uiOutput("var_nms_ui"),
+      uiOutput("var_tps_ui")
+    ),
+    # Input data
+    h6(tags$b("Input Data:")),
+    div(
+      style = "display: flex; gap: 20px; align-items: flex-start; margin-top: -10px;",
+      uiOutput("tb_no_ui"),
+      uiOutput("var_slt_ui")
+    ),
+    div(style = "overflow-x: auto; max-width: 800px; max-height: 800px;",
+        uiOutput("var_layout_ui")),
+    # Confirm the input
+    div(style = "margin-top: 10px"), 
+    div(style = "text-align: right;",
+        actionButton(inputId = "Trsfm_Butn",
+                     label = "Transform it!"))
+  )
 )
 
-## Card 2 - Tidy Format ----------------------------------------------------
+## Card2 - Output ----------------------------------------------------------
 
 card2 <- navset_card_tab(
   full_screen = TRUE,
   # Header
-  title = tags$b("Tidy Format"),
-  nav_panel(
-    title = "Tidy Data",
-    # Inspect the results:
-    h6(tags$b("Tidy Table")),
-    DT::dataTableOutput("tidy_tb") %>% shinycssloaders::withSpinner(), 
-    # Download the table:
-    uiOutput(outputId = "dl")
-  ),
+  title = tags$b("Output"),
   nav_panel(
     title = "For IGGYPOPseq", 
     ## Tidy data:
@@ -74,7 +122,14 @@ card2 <- navset_card_tab(
                  choices = c("Generated by the app" = "tdy_gnrt",
                              "Upload the file" = "tdy_upld"),
                  selected = "tdy_gnrt",
-                 inline = TRUE),
+                 inline = TRUE), 
+    conditionalPanel(condition = "input.tdy_opt == 'tdy_gnrt'", 
+                     # Inspect the results:
+                     div(style = "margin-top: -10px"), 
+                     DT::dataTableOutput("iggy_tidy_tb") %>% shinycssloaders::withSpinner(), 
+                     # Download the table:
+                     uiOutput(outputId = "iggy_tidy_dl")
+                     ),
     conditionalPanel(condition = "input.tdy_opt == 'tdy_upld'", 
                      fileInput(inputId = "file", 
                                label = NULL), 
@@ -82,38 +137,30 @@ card2 <- navset_card_tab(
                      p("Note: The information for 'primer_index', 'Replicate', 'PrimerPlate', and 'PrimerWell' should be included with the exact column names.")
     ),
     
-    ## Reference data:
-    #div(style = "margin-top: 10px"), 
-    fileInput(inputId = "ref_file", 
-              label = h6(tags$b("- Reference Info:"))),
-    div(style = "margin-top: -30px"), 
-    radioButtons(inputId = "cds_opt",
-                 label = h6("CDS:"),
-                 choices = c("Yes" = "y",
-                             "No" = "n"),
-                 selected = "n",
-                 inline = TRUE),
-    p("Note: The information for 'primer_index', 'n_frags', 'Reference', and 'ReferenceSequence' should be included with the exact column names. If your sequences are CDS sequences, 'CDS_length' should also be included."),
-    
     ## Primer data:
     h6(tags$b("- Primer & Barcode Info:")),
     div(style = "margin-top: -30px"), 
     radioButtons(inputId = "prr_slt", 
                  label = "Source:", 
-                 choices = c("Select the target vector" = "slt",
-                             "Upload the file" = "upld"),
+                 choices = c("Select the primer & barcode pair for the target vector" = "slt",
+                             "Upload the customized pair" = "upld"),
                  selected = "slt",
                  inline = TRUE),
     conditionalPanel(condition = "input.prr_slt == 'slt'",
                      selectInput(inputId = "prr_plt", 
                                  label = NULL, 
-                                 choices = c("pPOP" = "pop",
-                                             "pPlantPOP" = "pltpop"))
+                                 choices = c("pPlantPOP" = "pltpop",
+                                             "pPOP" = "pop"),
+                                 selected = "pltpop")
                      ), 
     conditionalPanel(condition = "input.prr_slt == 'upld'",
                      fileInput(inputId = "prr_file", label = NULL),
                      div(style = "margin-top: -30px"), 
-                     p("Note: The information for 'PrimerPlate', 'PrimerWell', 'Fwindex', 'FwPrimer', 'Rvindex', and 'RvPrimer' should be included with the exact column names.")
+                     p("Note: The information for 'PrimerPlate', 'PrimerWell', 'FwBarcode', 'FwPrimer', 'RvBarcode', and 'RvPrimer' should be included with the exact column names. Please see the ",
+                       tags$a(href = "https://github.com/ZenanXing/Tidy-Buddy/blob/main/data/pPOP_PrimerPlate_Layout_demo.tsv",
+                              "demo file"),
+                       " for reference."
+                     )
                      ),
     div(style = "margin-top: -20px"), 
     div(style = "text-align: right;",
@@ -124,6 +171,14 @@ card2 <- navset_card_tab(
     DT::dataTableOutput("iggypop_smp_info") %>% shinycssloaders::withSpinner(), 
     # Download the table:
     uiOutput(outputId = "iggypop_dl")
+  ),
+  nav_panel(
+    title = "Tidy Data",
+    # Inspect the results:
+    h6(tags$b("Tidy Table")),
+    DT::dataTableOutput("tidy_tb") %>% shinycssloaders::withSpinner(), 
+    # Download the table:
+    uiOutput(outputId = "dl")
   )
 )
 
