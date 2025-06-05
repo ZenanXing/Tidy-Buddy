@@ -1,9 +1,10 @@
 # Tidy Buddy
 
-**Tidy Buddy** is designed to assist users in generating data in a tidy format, making it easier to prepare datasets for various analytical tasks. While this app is particularly useful for [IGGYPOPseq](https://github.com/ZenanXing/Construct-Validation-for-IGGYPOPseq) users without coding background by helping create the input file `SampleInfo.tsv`, its functionality extends to generating any tidy format data suitable for a variety of research application, such as [BioCurve Analyzer](https://github.com/ZenanXing/Biocurve-Analyzer) :)  
+**Tidy Buddy** is designed to assist users in generating data in a tidy format, making it easier to prepare datasets for various analytical tasks. While this app is particularly beneficial for users of [IGGYPOPseq](https://github.com/ZenanXing/Construct-Validation-for-IGGYPOPseq), as it provides plate layouts for multiplexing and ultimately helping create the input file `SampleInfo.tsv`. However, its functionality extends to generating any tidy format data suitable for a variety of research application, such as [BioCurve Analyzer](https://github.com/ZenanXing/Biocurve-Analyzer) :)  
 
 ### Key Features
 
+- The app utilizes the [ReferenceInfo](https://github.com/cutlersr/iggypop/blob/main/out/test/test_ReferenceInfo.xlsx) output file from  [IGGYPOP](https://github.com/cutlersr/iggypop.git) as input. It provides plate layouts for multiplexing and generates the `SampleInfo.tsv`, which can be used in the downstream analysis pipeline, [IGGYPOPseq](https://github.com/ZenanXing/Construct-Validation-for-IGGYPOPseq).
 - Dynamic Sample Entry: Easily specify the number and format of input tables and variables. The application utilized [`rhandsontable`](https://github.com/jrowen/rhandsontable?tab=readme-ov-file), providing an Excel-like interface that enables convenient features, such as dragging to copy cell values.
 - Convenient Data Preview: Preview the generated dataset to verify that the data meets your requirements before downloading.
 - Diverse File Export: Download the generated data in a variety of formats, ready for immediate use in your analysis workflow.
