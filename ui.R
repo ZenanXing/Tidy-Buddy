@@ -12,6 +12,7 @@ library(openxlsx)
 ## Card 1 - Input ----------------------------------------------------------
 
 card1 <- navset_card_tab(
+  id = "input_nav", 
   full_screen = TRUE,
   # Header
   title = tags$b("Input"),
@@ -19,6 +20,7 @@ card1 <- navset_card_tab(
   # For IGGYPOPseq
   nav_panel(
     title = "For IGGYPOPseq",
+    value = "input_iggy",
     div(style = "text-align: center;", h5(tags$b("Generate Plate Layout"))), 
     
     ## Reference data:
@@ -70,6 +72,7 @@ card1 <- navset_card_tab(
   
   nav_panel(
     title = "Other purpose",
+    value = "input_other", 
     # Dimension
     h6(tags$b("Table Info.")),
     textInput(inputId = "n_tb", label = "- Number of tables", value = 6),
@@ -109,11 +112,13 @@ card1 <- navset_card_tab(
 ## Card2 - Output ----------------------------------------------------------
 
 card2 <- navset_card_tab(
+  id = "output_nav", 
   full_screen = TRUE,
   # Header
   title = tags$b("Output"),
   nav_panel(
     title = "For IGGYPOPseq", 
+    value = "output_iggy", 
     ## Tidy data:
     h6(tags$b("- Plate Layout Info:")),
     div(style = "margin-top: -30px"), 
@@ -174,6 +179,7 @@ card2 <- navset_card_tab(
   ),
   nav_panel(
     title = "Tidy Data",
+    value = "output_other", 
     # Inspect the results:
     h6(tags$b("Tidy Table")),
     DT::dataTableOutput("tidy_tb") %>% shinycssloaders::withSpinner(), 

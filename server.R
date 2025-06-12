@@ -1,16 +1,32 @@
 # Define server logic
 function(input, output, session) {
 
+# Select the navbar automatically -----------------------------------------
+  observeEvent(input$input_nav, {
+    if (identical(input$input_nav, "input_other")) {
+      bslib::nav_select(id = "output_nav", selected = "output_other")
+    } else {
+      bslib::nav_select(id = "output_nav", selected = "output_iggy")
+    }
+  })
+  observeEvent(input$output_nav, {
+    if (identical(input$output_nav, "output_other")) {
+      bslib::nav_select(id = "input_nav", selected = "input_other")
+    } else {
+      bslib::nav_select(id = "input_nav", selected = "input_iggy")
+    }
+  })
+  
 # Input --------------------------------------------------------------------
   rv <- reactiveValues()
   observe({
-    req(!is_null(iggypop_ref()), input$iggy_rep!="", 
-        input$n_tb!="", input$n_var!="", input$row!="", input$col!="")
+    req(input$n_tb!="", input$n_var!="", input$row!="", input$col!="")
     rv$n_tb <- input$n_tb
     rv$n_var <- input$n_var
     rv$row <- input$row
     rv$col <- input$col
     #iggypop-related
+    req(!is_null(iggypop_ref()), input$iggy_rep!="")
     rv$iggy_rep <- as.numeric(input$iggy_rep)
     rv$iggy_n_tb <- ceiling(nrow(iggypop_ref())/(96/rv$iggy_rep))
     
@@ -365,7 +381,7 @@ function(input, output, session) {
         lapply(seq_len(4), function(j) {
           
           local({
-            ii  <- i; jj  <- j
+            ii <- i; jj <- j
             key <- paste0("iggy_df_", ii, "_", jj)
             
             output[[key]] <- renderRHandsontable({
