@@ -56,10 +56,10 @@ This project is licensed under the GNU General Public License, version 3 (GPLv3)
 If you use the Tidy Buddy, please cite our paper and the related papers listed below.
 
 - **Our paper:**  
-*Xing Z, Eckhardt J, Vaidya AS, Cutler SR. [BioCurve Analyzer: a web-based shiny app for analyzing biological response curves](https://rdcu.be/ejBEp). Plant Methods 2025; 21: 1–9*
+*Dvir G, Xing Z, Beldman I, Rivera A, Wheeldon I, Cutler SR. (2025) [Synthesis of large single-transcript pathways from oligonucleotide pools: Design of STARBURST, an autobioluminescent reporter](https://www.pnas.org/doi/10.1073/pnas.2508109122). Proc. Natl. Acad. Sci. U. S. A. 122, e2508109122.*  
 
 - **IGGYPOPseq example:**  
-*Dvir G, Xing Z, Beldman I, Rivera A, Wheeldon I, Cutler SR. Synthesis of large single-transcript pathways from oligonucleotide pools: design of STARBURST, an autobioluminescent reporter (manuscript in preparation)*  
+*Dvir G, Xing Z, Beldman I, Rivera A, Wheeldon I, Cutler SR. (2025) [Synthesis of large single-transcript pathways from oligonucleotide pools: Design of STARBURST, an autobioluminescent reporter](https://www.pnas.org/doi/10.1073/pnas.2508109122). Proc. Natl. Acad. Sci. U. S. A. 122, e2508109122.*  
 
 - **Dose-response data example:**  
 *Vaidya AS, Helander JDM, Peterson FC, Elzinga D, Dejonghe W, Kaundal A, et al. [Dynamic control of plant water use using designed ABA receptor agonists](https://www.science.org/doi/10.1126/science.aaw8848?url_ver=Z39.88-2003&rfr_id=ori:rid:crossref.org&rfr_dat=cr_pub%20%200pubmed). Science. 2019;366:eaaw8848.*  
